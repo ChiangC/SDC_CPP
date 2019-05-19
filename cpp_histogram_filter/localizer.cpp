@@ -42,7 +42,28 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 	vector< vector <float> > newGrid;
 
 	// your code here
-	
+	/*
+	height = len(grid)
+    width = len(grid[0])
+    area = height * width
+    belief_per_cell = 1.0 / area
+    beliefs = []
+    for i in range(height):
+        row = []
+        for j in range(width):
+            row.append(belief_per_cell)
+        beliefs.append(row)
+    return beliefs
+	*/
+	int height = grid.size();
+	int width = grid[0].size();
+	float belief_per_cell = 1.0 / (height * width);
+
+	for (int row = 0; row < height; row++) {
+		vector<float> single_vector(width, belief_per_cell);
+		newGrid.push_back(single_vector);
+	}
+
 	return newGrid;
 }
 
@@ -92,6 +113,41 @@ vector< vector <float> > sense(char color,
 	vector< vector <float> > newGrid;
 
 	// your code here
+	/*
+	height = len(grid)
+    width = len(grid[0])
+    for i in range(height):
+        row = []
+        for j in range(width):
+            #pdb.set_trace()
+            row.append((p_hit if (color == grid[i][j]) else p_miss)*beliefs[i][j])
+        new_beliefs.append(row)
+        
+    p_sum = 0.    
+    for m in range(len(new_beliefs)):    
+        p_sum += sum(new_beliefs[m])
+    
+    for k in range(len(new_beliefs)):
+        for h in range(len(new_beliefs[0])):
+            new_beliefs[k][h] = new_beliefs[k][h]/p_sum*/
+	int height = grid.size();
+	int width = grid[0].size();
+	float p_sum = 0.0;
+	for (int row = 0; row < height; row++) {
+		vector<float> sigle_vector;
+		for (int column = 0; column < width; column++) {
+			float p_grid_item = (color == grid[row][column] ? p_hit : p_miss)*beliefs[row][column];
+			p_sum += p_grid_item;
+			sigle_vector.push_back(p_grid_item);
+		}
+		newGrid.push_back(sigle_vector);
+	}
+
+	for (int row = 0; row < height; row++) {
+		for (int column = 0; column < width; column++) {
+			newGrid[row][column] = newGrid[row][column] / p_sum;
+		}
+	}
 
 	return normalize(newGrid);
 }
@@ -142,6 +198,37 @@ vector< vector <float> > move(int dy, int dx,
 	vector < vector <float> > newGrid;
 
 	// your code here
+	/*height = len(beliefs)
+    width = len(beliefs[0])
+    new_G = [[0.0 for i in range(width)] for j in range(height)]
+    for i, row in enumerate(beliefs):
+        for j, cell in enumerate(row):
+            new_i = (i + dy) % height;
+            new_j = (j + dx) % width;
+            # pdb.set_trace()
+            new_G[int(new_i)][int(new_j)] = cell*/
+	int height = beliefs.size();
+	int width = beliefs[0].size();
+
+	//Init newGrid
+	for (int row = 0; row < height; row++) {
+		vector<float> singlerow(width, 0.0);
+		newGrid.push_back(singlerow);
+	}
+
+	for (int row = 0; row < height; row++) {
+		for (int column = 0; column < width; column++) {
+			int new_i = (row + dy) % height;
+			int new_j = (column + dx) % width;
+			newGrid[int(new_i)][int(new_j)] = beliefs[row][column];
+		}
+	}
 
 	return blur(newGrid, blurring);
 }
+
+/*
+Jiangchun
+chiangchuna@gmail.com
+May 19th, 2019 21:50
+*/
