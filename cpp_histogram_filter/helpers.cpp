@@ -89,6 +89,7 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
     @return - a new normalized two dimensional grid where probability 
     	   has been blurred.
 */
+//使用 blur 函数对概率值进行平滑处理
 vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
 
 	//TODO your code here
