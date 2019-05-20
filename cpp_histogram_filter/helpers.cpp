@@ -91,8 +91,6 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
 */
 vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
 
-	vector < vector <float> > newGrid;
-	
 	//TODO your code here
 
 	int height = grid.size();
@@ -111,10 +109,15 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	window.push_back(prob_vector1);
 
 	//Init newGrid
-	for (int row = 0; row < height; row++) {
+	/*for (int row = 0; row < height; row++) {
 		vector<float> singlerow(width, 0.0);
 		newGrid.push_back(singlerow);
-	}
+	}*/
+
+	/*vector<float> singlerow(width, 0.0);
+	vector < vector <float> > newGrid(height, singlerow);*/
+
+	vector < vector <float> > newGrid(height, vector<float>(width, 0.0));
 
 	for (int row = 0; row < height; row++) {
 		for (int column = 0; column < width; column++) {

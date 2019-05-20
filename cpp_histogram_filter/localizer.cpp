@@ -39,11 +39,11 @@ using namespace std;
 		   0.25 0.25
 */
 vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
-	vector< vector <float> > newGrid;
 	int height = grid.size();
 	int width = grid[0].size();
-	float belief_per_cell = 1.0 / (height * width);
+	float belief_per_cell = 1.0 / (grid.size() * width);
 
+	//Init Grid
 	vector< vector <float> > newGrid(height, vector<float>(width, belief_per_cell));
 
 	return newGrid;
@@ -152,16 +152,11 @@ vector< vector <float> > move(int dy, int dx,
 	vector < vector <float> > beliefs,
 	float blurring)
 {
-	vector < vector <float> > newGrid;
-
 	int height = beliefs.size();
 	int width = beliefs[0].size();
 
 	//Init newGrid
-	for (int row = 0; row < height; row++) {
-		vector<float> singlerow(width, 0.0);
-		newGrid.push_back(singlerow);
-	}
+	vector < vector <float> > newGrid(height, vector<float> (width, 0.0));
 
 	for (int row = 0; row < height; row++) {
 		for (int column = 0; column < width; column++) {
@@ -177,5 +172,10 @@ vector< vector <float> > move(int dy, int dx,
 /*
 Jiangchun
 chiangchuna@gmail.com
-May 19th, 2019 21:50
+May 19th, 2019 21:50 v1.0
+
+May 20th, 2019 20:22 v2.0
 */
+
+
+
