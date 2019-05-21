@@ -19,6 +19,11 @@
 
 using namespace std;
 
+vector < vector <float> > init_zeros(int height, int width) {
+	vector < vector <float> > newGrid(height, vector<float>(width, 0.0));
+	return newGrid;
+}
+
 /**
 	TODO - implement this function
 
@@ -33,9 +38,9 @@ using namespace std;
 */
 vector< vector<float> > normalize(vector< vector <float> > grid) {
 
-	vector< vector<float> > newGrid;
-
 	//TODO - your code here
+	/*
+	vector< vector<float> > newGrid;
 	float total = 0.0;
 	int rowSize = grid.size();
 	int colSize = grid[0].size();
@@ -52,8 +57,28 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
 		}
 		newGrid.push_back(singlerow);
 	}
+
+	return newGrid;*/
 	
-	return newGrid;
+	float total = 0.0;
+	int rows = grid.size();
+	int cols = grid[0].size();
+	int i, j;
+
+	// calculate total probability
+	for (i = 0; i < rows; ++i){
+		for (j = 0; j < cols; ++j){
+			total += grid[i][j];
+		}
+	}
+
+	for (i = 0; i < rows; ++i) {
+		for (j = 0; j < cols; ++j) {
+			grid[i][j] = grid[i][j] / total;
+		}
+	}
+
+	return grid;
 }
 
 /**
@@ -90,6 +115,56 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
     	   has been blurred.
 */
 //使用 blur 函数对概率值进行平滑处理
+//该函数只供优化练习，不能用于实际
+vector < vector <float> > blur_optimized(vector < vector < float> > grid, float blurring) {
+
+	static float GLOBAL_BLURRING = 0.12;
+
+	static float CENTER = 1.0 - GLOBAL_BLURRING;
+	static float CORNER = GLOBAL_BLURRING / 12.0;
+	static float ADJACENT = GLOBAL_BLURRING / 6.0;
+
+	static vector <int> DX = { -1, 0, 1 };
+	static vector <int> DY = { -1, 0, 1 };
+
+	static vector < vector <float> > GLOBAL_WINDOW = { {CORNER, ADJACENT, CORNER}, {ADJACENT, CENTER, ADJACENT}, {CORNER, ADJACENT, CORNER} };
+
+
+	vector < vector <float> > newGrid;
+
+	int height = grid.size();
+	int width = grid[0].size();
+
+	int i, j, ii, jj, new_i, new_j;
+	int dx, dy;
+
+	float multiplier;
+	float newVal;
+
+	// initialize new grid to zeros
+	newGrid = init_zeros(height, width);
+
+	// original way
+	for (i = 0; i < height; i++) {
+		for (j = 0; j < width; j++) {
+			newVal = grid[i][j];
+			for (ii = 0; ii < 3; ii++) {
+				dy = DY[ii];
+				for (jj = 0; jj < 3; jj++) {
+					dx = DX[jj];
+					new_i = (i + dy + height) % height;
+					new_j = (j + dx + width) % width;
+					multiplier = GLOBAL_WINDOW[ii][jj];
+					newGrid[new_i][new_j] += newVal * multiplier;
+				}
+			}
+		}
+	}
+
+	return normalize(newGrid);
+}
+
+//使用 blur 函数对概率值进行平滑处理
 vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
 
 	//TODO your code here
@@ -102,13 +177,6 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	float adjacent_prob = blurring / 6.0;
 
 	//Init window
-	/*vector< vector<float> > window;
-	vector<float> prob_vector1 = { corner_prob,  adjacent_prob,  corner_prob };
-	vector<float> prob_vector2 = { adjacent_prob, center_prob,  adjacent_prob };
-	window.push_back(prob_vector1);
-	window.push_back(prob_vector2);
-	window.push_back(prob_vector1);*/
-
 	vector< vector<float> > window = {
 		{corner_prob,  adjacent_prob,  corner_prob},
 		{adjacent_prob, center_prob,  adjacent_prob},
@@ -116,24 +184,30 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	};
 
 	//Init newGrid
-	vector < vector <float> > newGrid(height, vector<float>(width, 0.0));
+	vector < vector <float> > newGrid = init_zeros(width, height);
 
 	for (int row = 0; row < height; row++) {
 		for (int column = 0; column < width; column++) {
-			float grid_val = grid[row][column];
 
 			for (int dx = -1; dx < 2; ++dx) {
 				for (int dy = -1; dy < 2; ++dy) {
 					float mult = window[dx + 1][dy + 1];
-					int new_i = (row + dy) % height;
+
+					/*int new_i = (row + dy) % height;
 					int new_j = (column + dx) % width;
+
 					if (new_i < 0) {
 						new_i = height + new_i;
 					}
 					if (new_j < 0) {
 						new_j = width + new_j;
-					}
-					newGrid[new_i][new_j] += mult * grid_val;
+					}*/
+
+					//注释的代码等效于
+					int new_i = (row + dy + height) % height;
+					int new_j = (column + dx + width) % width;
+
+					newGrid[new_i][new_j] += mult * grid[row][column];
 				}
 			}
 		}
@@ -141,6 +215,7 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 
 	return normalize(newGrid);
 }
+
 
 /** -----------------------------------------------
 #
@@ -280,3 +355,5 @@ vector < vector <float> > zeros(int height, int width) {
 // 	show_grid(map);
 // 	return 0;
 // }
+
+

@@ -38,7 +38,7 @@ using namespace std;
 		   0.25 0.25
 		   0.25 0.25
 */
-vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
+vector< vector <float> > initialize_beliefs(vector< vector <char> > &grid) {
 
 	float belief_per_cell = 1.0 / (grid.size() * grid[0].size());
 
@@ -86,12 +86,11 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 		   representing the updated beliefs for the robot.
 */
 vector< vector <float> > sense(char color,
-	vector< vector <char> > grid,
-	vector< vector <float> > beliefs,
+	vector< vector <char> > &grid,
+	vector< vector <float> > &beliefs,
 	float p_hit,
 	float p_miss)
 {
-	vector< vector <float> > newGrid;
 
 	// your code here
 	int height = grid.size();
@@ -100,13 +99,12 @@ vector< vector <float> > sense(char color,
 	for (int row = 0; row < height; row++) {
 		vector<float> sigle_vector;
 		for (int column = 0; column < width; column++) {
-			float p_grid_item = (color == grid[row][column] ? p_hit : p_miss)*beliefs[row][column];
-			sigle_vector.push_back(p_grid_item);
+			beliefs[row][column] = (color == grid[row][column] ? p_hit : p_miss)*beliefs[row][column];
 		}
-		newGrid.push_back(sigle_vector);
+
 	}
 
-	return normalize(newGrid);
+	return normalize(beliefs);
 }
 
 
@@ -147,6 +145,9 @@ vector< vector <float> > sense(char color,
 	@return - a normalized two dimensional grid of floats
 		   representing the updated beliefs for the robot.
 */
+
+
+
 vector< vector <float> > move(int dy, int dx,
 	vector < vector <float> > beliefs,
 	float blurring)
@@ -155,7 +156,7 @@ vector< vector <float> > move(int dy, int dx,
 	int width = beliefs[0].size();
 
 	//Init newGrid
-	vector < vector <float> > newGrid(height, vector<float> (width, 0.0));
+	vector < vector <float> > newGrid(height, vector<float>(width, 0.0));
 
 	for (int row = 0; row < height; row++) {
 		for (int column = 0; column < width; column++) {
