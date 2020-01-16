@@ -52,17 +52,26 @@ VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
   // check the validity of the following inputs:
   //  * the estimation vector size should not be zero
   //  * the estimation vector size should equal ground truth vector size
+  if(estimations.size() == 0 || estimations.size() != ground_truth.size()){
+      return rmse;
+  }
 
   // TODO: accumulate squared residuals
   for (int i=0; i < estimations.size(); ++i) {
     // ... your code here
-    
+    // rmse = rmse + (estimations.at(i) - ground_truth.at(i))*(estimations.at(i) - ground_truth.at(i)); 
+    VectorXd residual = estimations[i] - ground_truth[i];
+
+    // coefficient-wise multiplication
+    residual = residual.array()*residual.array();
+    rmse += residual;
   }
 
   // TODO: calculate the mean
-
+  rmse = rmse/estimations.size(); 
   // TODO: calculate the squared root
-
+//   rmse << sqrt(rmse(0,0)), sqrt(rmse(1,0)), sqrt(rmse(2,0)), sqrt(rmse(3,0));   
+  rmse = rmse.array().sqrt();
   // return the result
   return rmse;
 }
