@@ -1,0 +1,21 @@
+
+http://wiki.ros.org/pcl
+
+https://www.researchgate.net/publication/331935965_Obstacle_detection_and_tracking_method_for_autonomous_vehicle_based_on_three-dimensional_LiDAR
+
+And this one gives a good view about the fusion benefits: 
+https://arxiv.org/pdf/1807.11264.pdf
+
+Summary:
+
+https://towardsdatascience.com/extended-kalman-filter-43e52b16757d
+
+https://medium.com/@tempflip/udacity-self-driving-cars-extended-kalman-filters-my-bits-99cbbaf65e3d
+https://medium.com/@fernandojaruchenunes/udacity-robotics-nd-project-6-where-am-i-8cd657063585
+
+https://medium.com/@tempflip/udacity-self-driving-cars-extended-kalman-filters-my-bits-99cbbaf65e3d
+
+More Options
+https://medium.com/intro-to-artificial-intelligence/extended-kalman-filter-simplified-udacitys-self-driving-car-nanodegree-46d952fce7a3
+
+
