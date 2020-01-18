@@ -37,7 +37,20 @@ FusionEKF::FusionEKF() {
    * TODO: Set the process and measurement noises
    */
 
+  ekf_.F_ = MatrixXd(4, 4);
+  ekf_.F_ << 1, 0, 1, 0,
+			 0, 1, 0, 1,
+			 0, 0, 1, 0,
+		     0, 0, 0, 1;
 
+  ekf_.Q_ = MatrixXd(4, 4);
+
+  // state covariance matrix P
+  ekf_.P_ = MatrixXd(4, 4);
+  ekf_.P_ << 1, 0, 0, 0,
+	  0, 1, 0, 0,
+	  0, 0, 1000, 0,
+	  0, 0, 0, 1000;
 }
 
 /**·
@@ -72,7 +85,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                     rho_dot*cos(phi),
                     rho_dot*sin(phi);
 
-      ekf_.Init(ekf_.x_, P_in, F_in, H_in, R_radar_, Q_in);
+	  Hj_ = tools.CalculateJacobian(ekf_.x_);
+
+      ekf_.Init(ekf_.x_, ekf_.P_, ekf_.F_, Hj_, R_radar_, ekf_.Q_);
 
       previous_timestamp_ = measurement_pack.timestamp_;
     }
@@ -84,6 +99,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                     0,
                     0;
 
+	 ekf_.Init(ekf_.x_, ekf_.P_, ekf_.F_, H_laser_, R_radar_, ekf_.Q_);
 
      previous_timestamp_ = measurement_pack.timestamp_;
     }

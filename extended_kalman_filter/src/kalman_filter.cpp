@@ -1,5 +1,5 @@
 #include "kalman_filter.h"
-#include <math>
+#include <math.h>
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
@@ -59,7 +59,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
         atan(py/px),
         (px*vx +py*vy)/sqrt(px*px + py*py);
    VectorXd y = z - h;
-   MatrixXd Hj =  tools.CalculateJacobian(x_);
+   MatrixXd Hj = H_;
 
    MatrixXd S = Hj*P_*Hj.transpose() + R_;
    MatrixXd K = P_*Hj.transpose()*S.inverse();
