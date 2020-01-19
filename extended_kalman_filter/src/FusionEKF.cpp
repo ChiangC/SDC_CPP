@@ -37,6 +37,9 @@ FusionEKF::FusionEKF() {
    * TODO: Set the process and measurement noises
    */
 
+  H_laser_ << 1, 0, 0, 0,
+              0, 1, 0, 0;
+
   ekf_.F_ = MatrixXd(4, 4);
   ekf_.F_ << 1, 0, 1, 0,
 			 0, 1, 0, 1,
@@ -77,34 +80,28 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       // TODO: Convert radar from polar to cartesian coordinates 
       //         and initialize state.
-      //std::cout << "Init RADAR---Start" << std::endl;
+
       double rho = measurement_pack.raw_measurements_[0]; //range
       double phi = measurement_pack.raw_measurements_[1]; //bearing
       double rho_dot = measurement_pack.raw_measurements_[2]; //radial velocity
+
       ekf_.x_ << rho*cos(phi),
                     rho*sin(phi),
                     rho_dot*cos(phi),
                     rho_dot*sin(phi);
 
-      ekf_.Init(ekf_.x_, ekf_.P_, ekf_.F_, Hj_, R_radar_, ekf_.Q_);
-
       previous_timestamp_ = measurement_pack.timestamp_;
 
-      //std::cout << "Init RADAR---End" << std::endl;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       // TODO: Initialize state.
-     //std::cout << "Init LASER---Start" << std::endl;
+
      ekf_.x_ << measurement_pack.raw_measurements_[0],
                     measurement_pack.raw_measurements_[1],
                     0,
                     0;
 
-	 ekf_.Init(ekf_.x_, ekf_.P_, ekf_.F_, H_laser_, R_laser_, ekf_.Q_);
-
      previous_timestamp_ = measurement_pack.timestamp_;
-
-     //std::cout << "Init LASER---End" << std::endl;
 
     }
 
@@ -159,16 +156,16 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // TODO: Radar updates
-    //cout << "---RADAR Data" << endl;
     ekf_.R_ = R_radar_;
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     ekf_.UpdateEKF(measurement_pack.raw_measurements_);
+
   } else {
     // TODO: Laser updates
-    //cout << "---LASER Data" << endl;
     ekf_.R_ = R_laser_;
     ekf_.H_ = H_laser_;
     ekf_.Update(measurement_pack.raw_measurements_);
+
   }
 
   // print the output
