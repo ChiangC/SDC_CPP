@@ -15,7 +15,21 @@ https://medium.com/@fernandojaruchenunes/udacity-robotics-nd-project-6-where-am-
 
 https://medium.com/@tempflip/udacity-self-driving-cars-extended-kalman-filters-my-bits-99cbbaf65e3d
 
-More Options
 https://medium.com/intro-to-artificial-intelligence/extended-kalman-filter-simplified-udacitys-self-driving-car-nanodegree-46d952fce7a3
 
+https://medium.com/intro-to-artificial-intelligence/extended-kalman-filter-simplified-udacitys-self-driving-car-nanodegree-46d952fce7a3
 
+https://towardsdatascience.com/extended-kalman-filter-43e52b16757d
+
+https://medium.com/@tempflip/udacity-self-driving-cars-extended-kalman-filters-my-bits-99cbbaf65e3d
+
+https://medium.com/@fernandojaruchenunes/udacity-robotics-nd-project-6-where-am-i-8cd657063585
+
+
+cd CarND-Extended-Kalman-Filter-Project
+
+cd build
+
+cmake .. && make
+
+./

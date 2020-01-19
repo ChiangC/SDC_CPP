@@ -45,6 +45,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
    */
 
    MatrixXd Hj(3,4);
+
    float px = x_state(0);
    float py = x_state(1);
    float vx = x_state(2);
@@ -56,11 +57,12 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
    if(fabs(c1) < 0.0001){
      cout<< "CalculateJacobian () - Error - Division by Zero"<<endl;
+     Hj.fill(0.0);
      return Hj;
    }
 
-   Hj << (px/c2), (py/c2),0,0,
-        -(py/c1), (px/c1),0,0,
+   Hj << (px/c2), (py/c2),0.0,0.0,
+        -(py/c1), (px/c1),0.0,0.0,
         py*(vx*py - vy*px)/c3, px*(px*vy - py*vx)/c3, px/c2, py/c2;
 
    return Hj;
