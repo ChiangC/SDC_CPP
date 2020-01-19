@@ -33,3 +33,44 @@ cd build
 cmake .. && make
 
 ./
+
+======================
+VIP
+Nice work in applying what you've learned, building an Extended Kalman Filter in C++, and testing it against the sample data!
+
+Kalman filter is an efficient estimation/tracking tool that allows us to integrate controls and measurements in continuous space and find continuous state estimates.
+
+Just in case you haven't read it yet, this blog does a very good job of explaining the math behind kalman filter, particularly concerning the derivation of Kalman gain K.
+
+In real life project, I tend to leverage open source kalman fitler framework to perform sensor fusion tasks. This approach allows me to quickly build up fusion system and spend more time in fine tuning the fusion algorithm targeting specific sensors/hardware, 
+it also gives me the opportunity to learn from others and gain deeper understanding into kalman fitler. 
+Fox example, ROS provides an excellent generalized extended kalman fitler library that allows 
+us to perform robot location tracking. It uses Constant Turn Rate and Acceleration motion model to perform prediction, and measurements from various sensor like IMU, GPS, Wheel Odometry to perform update step. 
+If you are interested, here is the paper(http://docs.ros.org/melodic/api/robot_localization/html/_downloads/robot_localization_ias13_revised.pdf)
+ on the ekf framework, and here is the code implementation(https://github.com/cra-ros-pkg/robot_localization/blob/melodic-devel/src/ekf.cpp)
+
+
+http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
+
+
+http://docs.ros.org/melodic/api/robot_localization/html/_downloads/robot_localization_ias13_revised.pdf
+
+
+https://github.com/cra-ros-pkg/robot_localization/blob/melodic-devel/src/ekf.cpp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
